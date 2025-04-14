@@ -1,32 +1,56 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Monarch Cricket Map</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <style>
-        #map {
-            width: 100%;
-            height: 100vh;
-        }
-        body {
-            margin: 0;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <title>Monarch Cricket Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+  <style>
+    #map {
+      height: 100vh;
+    }
+  </style>
 </head>
 <body>
-    <div id="map"></div>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        var map = L.map('map').setView([45.3566, -75.6083], 14);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-        L.marker([45.3566, -75.6083]).addTo(map)
-            .bindPopup('Monarch Cricket')
-            .openPopup();
-    </script>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  // Create map and set initial view
+  var map = L.map('map').setView([45.373951, -75.723274], 14);
+
+  // Basemap: Street view (OpenStreetMap)
+  var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap contributors'
+  });
+
+  // Basemap: Satellite view (Esri World Imagery)
+  var satellite = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 19,
+      attribution: 'Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics'
+    }
+  );
+
+  // Add the default (street) base layer to the map
+  street.addTo(map);
+
+  // Add basemap control
+  var baseMaps = {
+    "Street View": street,
+    "Satellite View": satellite
+  };
+  L.control.layers(baseMaps).addTo(map);
+
+  // Add a marker
+  var marker = L.marker([45.373951, -75.723274]).addTo(map);
+  marker.bindPopup("<b>Monarch Cricket Club</b><br>Ottawa, ON").openPopup();
+</script>
+
 </body>
 </html>
