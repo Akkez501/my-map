@@ -1,64 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
+  <title>Leaflet Map with Image Popup</title>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leaflet Map with Image Popups</title>
-  <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-gl@0.3.0/leaflet-gl.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
   <style>
-    #map { height: 100vh; }
+    #map {
+      height: 100vh;
+    }
   </style>
 </head>
 <body>
 
 <div id="map"></div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
   // Initialize the map
-  var map = L.map('map').setView([45.373951, -75.723274], 14); // Monarch Cricket Club, Ottawa
+  var map = L.map('map').setView([45.373951, -75.723274], 14);
 
-  // Add OpenStreetMap base layer
+  // Add base layer
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-  // GeoJSON data for markers with image URLs
-  var locations = [
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [-75.723274, 45.373951] // Monarch Cricket Club coordinates
-      },
-      "properties": {
-        "name": "Monarch Cricket Club",
-        "image": "https://www.monarchcricket.com/cdn/shop/files/IMG_2571_1280x.jpg?v=1733586934" // Replace with an actual image URL
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [-75.724000, 45.374500] // Another location (just an example)
-      },
-      "properties": {
-        "name": "Example Location",
-        "image": "https://www.monarchcricket.com/cdn/shop/files/IMG_2571_1280x.jpg?v=1733586934" // Replace with an actual image URL
-      }
-    }
-  ];
-
-  // Add markers with popups containing images
-  L.geoJSON(locations, {
-    onEachFeature: function (feature, layer) {
-      // Create a popup with an image
-      var popupContent = '<b>' + feature.properties.name + '</b><br>';
-      popupContent += '<img src="' + feature.properties.image + '" width="200" height="200">';
-      
-      // Bind popup to the marker
-      layer.bindPopup(popupContent);
-    }
-  }).addTo(map);
+  // Add marker with working image popup
+  var marker = L.marker([45.373951, -75.723274]).addTo(map);
+  marker.bindPopup(
+    '<b>Monarch Cricket Club</b><br><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Cricket_pitch_in_the_summer.jpg/640px-Cricket_pitch_in_the_summer.jpg" width="250">'
+  );
 </script>
 
 </body>
