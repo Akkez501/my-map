@@ -3,42 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leaflet Map with 3D Buildings</title>
+  <title>Leaflet Map with Image Popups</title>
   <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-gl@0.3.0/leaflet-gl.js"></script>
   <style>
-    #map {
-      height: 100vh; /* Full-screen map */
-    }
+    #map { height: 100vh; }
   </style>
 </head>
 <body>
 
-<!-- Map Container -->
 <div id="map"></div>
 
 <script>
-  // Initialize map
-  var map = L.map('map').setView([45.373951, -75.723274], 14); // Example: Monarch Cricket Club, Ottawa
+  // Initialize the map
+  var map = L.map('map').setView([45.373951, -75.723274], 14); // Monarch Cricket Club, Ottawa
 
   // Add OpenStreetMap base layer
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-  }).addTo(map);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-  // Add 3D buildings layer using Leaflet-GL
-  var glLayer = L.glify.layer({
-    map: map,
-    attribution: '3D buildings with Leaflet-GL',
-    style: {
-      buildingColor: '#2d2d2d',
-      extrude: true,
+  // GeoJSON data for markers with image URLs
+  var locations = [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-75.723274, 45.373951] // Monarch Cricket Club coordinates
+      },
+      "properties": {
+        "name": "Monarch Cricket Club",
+        "image": "https://example.com/monarch-cricket.jpg" // Replace with an actual image URL
+      }
     },
-    data: 'https://raw.githubusercontent.com/leaflet-extras/leaflet-glify/master/examples/3d-buildings.geojson' // Example GeoJSON for 3D buildings
-  });
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-75.724000, 45.374500] // Another location (just an example)
+      },
+      "properties": {
+        "name": "Example Location",
+        "image": "https://example.com/example-image.jpg" // Replace with an actual image URL
+      }
+    }
+  ];
 
-  glLayer.addTo(map);
+  // Add markers with popups containing images
+  L.geoJSON(locations, {
+    onEachFeature: function (feature, layer) {
+      // Create a popup with an image
+      var popupContent = '<b>' + feature.properties.name + '</b><br>';
+      popupContent += '<img src="' + feature.properties.image + '" width="200" height="200">';
+      
+      // Bind popup to the marker
+      layer.bindPopup(popupContent);
+    }
+  }).addTo(map);
 </script>
 
 </body>
